@@ -110,6 +110,8 @@ def converter_data(dados, coluna):
                 datas_convertidas += 1
             except ValueError:
                 linha[coluna] = "nao especificada"
+        else:
+            linha[coluna] = "nao especificada"
     return datas_convertidas
 
 
@@ -126,3 +128,23 @@ def conferir_status_pedidos(dados):
                 pedidos_inconsistentes += 1
 
     return pedidos_cancelados, pedidos_inconsistentes
+
+
+def tratar_colunas_descritivas(dados):
+    colunas = [
+        "product_name_lenght",
+        "product_description_lenght",
+        "product_photos_qty"
+    ]
+
+    contador = 0
+
+    for linha in dados:
+        for coluna in colunas:
+            valor = linha.get(coluna)
+
+            if valor is None or str(valor).strip() == "":
+                linha[coluna] = 0
+                contador += 1
+
+    return dados, contador
