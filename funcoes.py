@@ -1,8 +1,11 @@
+# Importando bibliotecas necessárias
+
 import csv
 import re
 import datetime
 
 
+# Função para ler o arquivo CSV e retornar os dados como uma lista de dicionários
 
 caminho_arquivo = "olist_products_dataset.csv"
 def ler_csv(caminho_arquivo):
@@ -17,6 +20,8 @@ def ler_csv(caminho_arquivo):
     return dados
 
 
+# Função para tratar valores nulos na coluna "product_category_name" e contar quantos foram corrigidos
+
 def tratar_nulos(dados):
     contador_nulos_corrigidos = 0
 
@@ -28,6 +33,9 @@ def tratar_nulos(dados):
     return dados, contador_nulos_corrigidos
 
 
+# Função para padronizar os valores da coluna "product_category_name" (remover espaços, converter para minúsculas e remover caracteres especiais)
+# Pode ser alterada para incluir outras colunas, caso necessário ao trocar o nome da coluna dentro da função ou criar uma lista de colunas a serem padronizadas e
+# iterar sobre elas dentro da função, como foi feito para as dimensões físicas dos produtos.
 
 def padronizar_categorias(dados):
 
@@ -40,6 +48,8 @@ def padronizar_categorias(dados):
         linha["product_category_name"] = categoria
     return dados
 
+
+# Função para calcular a média de uma coluna numérica, ignorando valores nulos ou não numéricos
 
 def calcular_media(dados, coluna):
     total = 0
@@ -58,7 +68,11 @@ def calcular_media(dados, coluna):
         return total / contador
     else:
         return None
-    
+
+
+# Função para tratar valores nulos nas colunas de dimensões físicas dos produtos, substituindo por médias calculadas e contando quantos foram corrigidos,
+# A função salva as médias como float, caso necessário para padronização substituir a linha 95 por(linha[coluna] = str(medias_dimensoes.get(coluna, 0))
+# o que vai manter todos os dados do dataset padronizados em string.
 
 def tratar_dimensoes_nulas(dados):
 
@@ -84,6 +98,7 @@ def tratar_dimensoes_nulas(dados):
     return dados, linhas_nulos_corrigidos
 
 
+# Função para salvar os dados tratados em um novo arquivo CSV
 
 def salvar_csv(dados, caminho_saida):
     if not dados:
@@ -97,7 +112,8 @@ def salvar_csv(dados, caminho_saida):
         writer.writeheader()
         writer.writerows(dados)
 
-
+# Função para converter as datas presentes no dataser "orders", 
+# a função recebe os dados e o nome da coluna a ser convertida, e retorna a quantidade de datas convertidas.
 
 def converter_data(dados, coluna):
     datas_convertidas = 0
@@ -114,6 +130,8 @@ def converter_data(dados, coluna):
             linha[coluna] = "nao especificada"
     return datas_convertidas
 
+# Função para conferir o status dos pedidos, verificando se há pedidos cancelados ou inconsistentes (sem data de entrega especificada e status diferente de "canceled")
+# A função retorna a quantidade de pedidos cancelados e a quantidade de pedidos inconsistentes encontrados no dataset "orders".
 
 def conferir_status_pedidos(dados):
     pedidos_cancelados = 0
@@ -130,6 +148,8 @@ def conferir_status_pedidos(dados):
     return pedidos_cancelados, pedidos_inconsistentes
 
 
+# Função para tratar colunas descritivas, substituindo valores nulos ou vazios por "0"(dados ausentes = "0") e contando quantos foram corrigidos.
+
 def tratar_colunas_descritivas(dados):
     colunas = [
         "product_name_lenght",
@@ -144,7 +164,7 @@ def tratar_colunas_descritivas(dados):
             valor = linha.get(coluna)
 
             if valor is None or str(valor).strip() == "":
-                linha[coluna] = 0
+                linha[coluna] = "0"
                 contador += 1
 
     return dados, contador
