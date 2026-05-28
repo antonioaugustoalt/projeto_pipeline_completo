@@ -41,6 +41,13 @@ main.ipynb
 
 ---
 
+5. Conclusão sobre hipótese de negócio
+
+  A diretoria identificou que muitas datas de entrega (order_delivered_customer_date) estão vazias.
+a hipótese de negócio da Olist: essas datas estão nulas obrigatoriamente porque o status do pedido (order_status) consta como cancelado (canceled)
+
+  Entretanto, foi possível identificar diversos pedidos que não foram cancelados e não possuem data (data nula/vazia). Com isso, a hipótese se prova falsa.
+
 # Reflexão Teórica sobre Machine Learning
 
 Dados que não forem devidamente selecionados e tratados não podem gerar um bom aprendizado para qualquer modelo de machine learning,
